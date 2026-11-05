@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tanglish to Tamil</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 0 16px;
+      background: #fdf8f0;
+      color: #2b2b2b;
+    }
+    h1 { color: #8b1e1e; margin-bottom: 4px; }
+    p.sub { color: #666; margin-top: 0; }
+    textarea {
+      width: 100%;
+      height: 110px;
+      font-size: 18px;
+      padding: 12px;
+      border: 2px solid #d9c9b0;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+    #output {
+      min-height: 110px;
+      font-size: 26px;
+      padding: 12px;
+      margin-top: 12px;
+      background: white;
+      border: 2px solid #8b1e1e;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+    button {
+      margin-top: 12px;
+      padding: 10px 18px;
+      font-size: 16px;
+      background: #8b1e1e;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .hint { font-size: 14px; color: #555; margin-top: 24px; line-height: 1.6; }
+    code { background: #efe6d6; padding: 1px 5px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <h1>Tanglish → தமிழ்</h1>
+  <p class="sub">Type Tamil in English letters and see it in Tamil script.</p>
+
+  <textarea id="input" placeholder="Try: vaNakkam, nandri, thamizh naadu"></textarea>
+  <div id="output"></div>
+  <button id="copy">Copy Tamil text</button>
+
+  <div class="hint">
+    <b>Tips:</b> double vowels for long sounds (<code>aa</code>, <code>ee</code>, <code>oo</code>) ·
+    <code>zh</code> = ழ · capital <code>N</code> = ண, <code>L</code> = ள, <code>R</code> = ற ·
+    <code>E</code> / <code>O</code> = long ஏ / ஓ
+  </div>
+
+  <script src="translit.js"></script>
+  <script>
+    const input = document.getElementById("input");
+    const output = document.getElementById("output");
+
+    // Re-convert every time the user types
+    input.addEventListener("input", () => {
+      output.textContent = transliterate(input.value);
+    });
+
+    document.getElementById("copy").addEventListener("click", () => {
+      navigator.clipboard.writeText(output.textContent);
+    });
+  </script>
+</body>
+</html>
