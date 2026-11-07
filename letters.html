@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tamil letters – Ari</title>
+  <meta name="description" content="Every Tamil letter and what to type for it in Tanglish: vowels, consonants, borrowed letters, letter pairs and all 216 combinations.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;500;600;700;800&family=Noto+Serif+Tamil:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/common.js"></script>
+</head>
+<body>
+  <a class="skip" href="#practice">Skip to the practice box</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="index.html" aria-label="Ari home">
+        <span class="brand-mark" data-logo></span>
+        <span class="brand-name">Ari</span>
+      </a>
+      <nav class="site-nav" aria-label="Pages">
+        <a href="index.html">Translate</a>
+        <a href="letters.html" aria-current="page">Letters</a>
+      </nav>
+      <div class="appearance">
+        <button type="button" class="appearance-btn" id="appearanceBtn" aria-expanded="false" aria-controls="appearancePanel" aria-label="Change colors">
+          <span class="appearance-dot"></span>
+        </button>
+        <div class="appearance-panel" id="appearancePanel" role="dialog" aria-label="Colors" hidden>
+          <p class="panel-title">Site color</p>
+          <div class="swatches"></div>
+          <label class="custom-color"><input type="color" id="customColor" value="#d0262b"> Pick any color</label>
+          <p class="panel-title">Mode</p>
+          <div class="segmented">
+            <button type="button" data-theme-choice="light">Light</button>
+            <button type="button" data-theme-choice="dark">Dark</button>
+            <button type="button" data-theme-choice="system">Auto</button>
+          </div>
+          <button type="button" class="link-btn" id="resetColor">Reset to default</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="letters-top">
+      <div class="wrap">
+        <div class="page-intro">
+          <h1>Tamil letters</h1>
+          <p>What to type for every letter. Click a letter to add it to the practice box.</p>
+        </div>
+
+        <div class="practice" id="practice">
+          <label for="practiceInput">Practice</label>
+          <input type="text" id="practiceInput" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="Click letters below or type, e.g. kOlam">
+          <output class="practice-out" id="practiceOut" for="practiceInput" lang="ta" aria-live="polite"></output>
+          <div class="practice-actions">
+            <button type="button" class="btn btn-quiet" id="practiceClear">Clear</button>
+            <a class="btn btn-primary" id="practiceOpen" href="index.html">Open in translator</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-tight" aria-labelledby="basicsTitle">
+      <div class="wrap">
+        <h2 class="visually-hidden" id="basicsTitle">Letters</h2>
+        <div class="guide-grid">
+          <div class="guide-block">
+            <h3>Vowels <span lang="ta">உயிர்</span></h3>
+            <div class="keys" id="vowelKeys"></div>
+          </div>
+          <div class="guide-block">
+            <h3>Consonants <span lang="ta">மெய்</span></h3>
+            <div class="keys" id="consonantKeys"></div>
+          </div>
+          <div class="guide-block">
+            <h3>Borrowed letters <span lang="ta">கிரந்தம்</span></h3>
+            <p class="small">Used mostly for words from Sanskrit and other languages.</p>
+            <div class="keys" id="granthaKeys"></div>
+          </div>
+          <div class="guide-block">
+            <h3>Letter pairs</h3>
+            <p class="small">Some pairs are always written together in Tamil, so one shortcut types both.</p>
+            <table class="pairs" id="pairsTable">
+              <thead><tr><th scope="col">Tamil</th><th scope="col">Type</th><th scope="col">Example</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="gridTitle">
+      <div class="wrap">
+        <div class="guide-block">
+          <h2 class="h3" id="gridTitle">All 216 combinations <span lang="ta">உயிர்மெய்</span></h2>
+          <p class="small">Each row is a consonant and each column a vowel. The small text under each letter is what to type.</p>
+          <div class="grid-scroll" tabindex="0" aria-label="Table of Tamil consonant and vowel combinations, scrollable">
+            <table class="uyirmei" id="uyirmei"></table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="tipsTitle">
+      <div class="wrap">
+        <h2 id="tipsTitle">Typing tips</h2>
+        <ul class="tips">
+          <li><b>Long vowels:</b> double the letter. <kbd>a</kbd> is அ, <kbd>aa</kbd> is ஆ; <kbd>i</kbd> is இ, <kbd>ee</kbd> is ஈ.</li>
+          <li><b>Capitals matter for a few letters:</b> <kbd>N</kbd> ண, <kbd>L</kbd> ள, <kbd>R</kbd> ற, <kbd>E</kbd> ஏ, <kbd>O</kbd> ஓ. Other capitals are read as lowercase.</li>
+          <li><b>One n, three letters:</b> <kbd>n</kbd> gives ந at the start of a word, ன in the middle, and ண before t or d.</li>
+          <li><b>Doubled sounds:</b> type the letter twice. <kbd>kk</kbd> gives க்க, as in வணக்கம்.</li>
+          <li><b>Not sure?</b> Type it the way you'd text a friend. If the word isn't recognised, the translator suggests the closest real word.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>Built by Ari Rajkumar. <a href="https://github.com/ariraj7/Tanglish-to-tamil">Source code on GitHub</a></p>
+      <p class="small">Everything runs in your browser; nothing you type is sent anywhere.</p>
+    </div>
+  </footer>
+
+  <script src="js/translit.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/letters.js"></script>
+</body>
+</html>

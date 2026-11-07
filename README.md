@@ -1,6 +1,6 @@
-# Ezhuthu (எழுத்து): Tanglish to Tamil
+# Ari: Tanglish to Tamil
 
-**Type Tamil the way you speak it.** Ezhuthu converts Tanglish (Tamil written in English letters) into Tamil script as you type, and suggests the real word you meant when a spelling is ambiguous.
+**Type Tamil the way you speak it.** Ari converts Tanglish (Tamil written in English letters) into Tamil script as you type, and suggests the real word you meant when a spelling is ambiguous.
 
 **Live site:** https://ariraj7.github.io/Tanglish-to-tamil/
 
@@ -15,11 +15,12 @@
 
 - **Live conversion** in side-by-side panels, plus a **reverse mode** (Tamil → Tanglish)
 - **Spelling suggestions:** words that aren't in a 17,600-word Tamil dictionary get underlined, with one-click fixes (`thamil` → தமிழ், `vanakam` → வணக்கம்)
-- **Letter guide:** every vowel, consonant and letter pair, plus a clickable 18 × 12 grid of all combinations
+- **Letters page:** every vowel, consonant and letter pair, a clickable grid of all 216 combinations, and a practice box that sends your text to the translator
+- **Pick any color:** ten preset colors or any custom color, plus light, dark or automatic mode. Text colors adjust automatically so every choice stays readable (WCAG contrast)
 - **Step-by-step view** that shows exactly how your text was read, and which spelling rules applied
 - **Word of the day** with its meaning and what to type
 - Copy, share on WhatsApp, download as .txt, recent history, word and letter counts
-- Dark mode, works on phones, keyboard accessible
+- Works on phones, keyboard accessible
 - Runs entirely in the browser: no server, nothing you type leaves your device
 
 ## How it works
@@ -33,12 +34,15 @@
 ## Project structure
 
 ```
-index.html              page structure
-css/style.css           design (light and dark themes)
+index.html              translator (home page)
+letters.html            letter guide and practice box
+css/style.css           design; every highlight comes from one --accent color
 js/translit.js          converter engine: forward, reverse, trace, suggestions
-js/app.js               connects the engine to the page
+js/common.js            logo, color picker, light/dark mode (shared by both pages)
+js/translate.js         translator page
+js/letters.js           letters page
 js/data.js              word of the day, examples, letter guide data
-js/kolam.js             draws the kolam in the header
+assets/                 logo and favicon
 js/dictionary.js        generated Tamil word list
 tools/                  script that builds the dictionary, plus hand-added words
 tests/test.js           tests

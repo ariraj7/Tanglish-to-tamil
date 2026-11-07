@@ -3,58 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ezhuthu – Tanglish to Tamil converter</title>
-  <meta name="description" content="Type Tamil the way you speak it. Ezhuthu turns Tanglish (Tamil in English letters) into Tamil script, with spelling suggestions, a letter guide and a word of the day.">
-  <meta property="og:title" content="Ezhuthu – Tanglish to Tamil converter">
+  <title>Ari – Tanglish to Tamil translator</title>
+  <meta name="description" content="Type Tamil the way you speak it. Ari turns Tanglish (Tamil in English letters) into Tamil script, with spelling suggestions and a full letter guide.">
+  <meta property="og:title" content="Ari – Tanglish to Tamil translator">
   <meta property="og:description" content="Type Tamil the way you speak it, in English letters.">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@400;500;600;700;800&family=Noto+Serif+Tamil:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <script>
-    // Apply the saved theme before the page paints, so there's no flash
-    try { const t = localStorage.getItem("ezhuthu-theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
-  </script>
+  <script src="js/common.js"></script>
 </head>
 <body>
-  <a class="skip" href="#converter">Skip to the converter</a>
+  <a class="skip" href="#input">Skip to the translator</a>
 
   <header class="site-header">
     <div class="wrap header-inner">
-      <a class="brand" href="#top" aria-label="Ezhuthu home">
-        <img src="assets/favicon.svg" alt="" width="34" height="34">
-        <span class="brand-name">Ezhuthu</span>
-        <span class="brand-ta" lang="ta">எழுத்து</span>
+      <a class="brand" href="index.html" aria-label="Ari home">
+        <span class="brand-mark" data-logo></span>
+        <span class="brand-name">Ari</span>
       </a>
-      <nav class="site-nav" aria-label="Sections">
-        <a href="#converter">Converter</a>
-        <a href="#letters">Letters</a>
-        <a href="#word">Word of the day</a>
-        <a href="#how">How it works</a>
+      <nav class="site-nav" aria-label="Pages">
+        <a href="index.html" aria-current="page">Translate</a>
+        <a href="letters.html">Letters</a>
       </nav>
-      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark mode">
-        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
-        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
-      </button>
+      <div class="appearance">
+        <button type="button" class="appearance-btn" id="appearanceBtn" aria-expanded="false" aria-controls="appearancePanel" aria-label="Change colors">
+          <span class="appearance-dot"></span>
+        </button>
+        <div class="appearance-panel" id="appearancePanel" role="dialog" aria-label="Colors" hidden>
+          <p class="panel-title">Site color</p>
+          <div class="swatches"></div>
+          <label class="custom-color"><input type="color" id="customColor" value="#d0262b"> Pick any color</label>
+          <p class="panel-title">Mode</p>
+          <div class="segmented">
+            <button type="button" data-theme-choice="light">Light</button>
+            <button type="button" data-theme-choice="dark">Dark</button>
+            <button type="button" data-theme-choice="system">Auto</button>
+          </div>
+          <button type="button" class="link-btn" id="resetColor">Reset to default</button>
+        </div>
+      </div>
     </div>
   </header>
 
-  <main id="top">
-    <!-- Hero: the threshold, where a kolam is drawn every morning -->
-    <section class="hero" aria-labelledby="heroTitle">
-      <div class="wrap hero-inner">
-        <div class="hero-text">
-          <h1 id="heroTitle"><span class="hero-ta" lang="ta">எழுத்து</span><span class="hero-en">Type Tamil the way you speak it.</span></h1>
-          <p class="hero-sub">Write in English letters and get Tamil script as you type. When a word could be spelled more than one way, Ezhuthu suggests the real word you meant.</p>
-        </div>
-        <div class="hero-kolam" id="heroKolam"></div>
-      </div>
-    </section>
-
-    <!-- Converter -->
-    <section class="converter-section" id="converter" aria-label="Converter">
+  <main>
+    <section class="translate" aria-labelledby="pageTitle">
       <div class="wrap">
+        <div class="page-intro">
+          <h1 id="pageTitle">Tanglish to Tamil</h1>
+          <p>Type Tamil the way you speak it, in English letters. When a word could be spelled more than one way, you'll get the real word you meant.</p>
+        </div>
+
         <div class="converter">
           <div class="pane pane-in">
             <div class="pane-head">
@@ -76,7 +76,7 @@
               <span id="outputLabel">தமிழ்</span>
               <span class="pane-hint" id="counts"></span>
             </div>
-            <div class="output" id="output" aria-live="polite" aria-label="Converted text"><span class="output-empty">Your Tamil text appears here.</span></div>
+            <div class="output" id="output" aria-live="polite" aria-label="Translated text"></div>
             <div class="suggest" id="suggest" hidden></div>
             <div class="actions">
               <button type="button" id="copyBtn" class="btn btn-primary">Copy</button>
@@ -87,75 +87,38 @@
           </div>
         </div>
 
-        <details class="history" id="history">
-          <summary>Recent <span id="historyCount"></span></summary>
-          <ol class="history-list" id="historyList"></ol>
-          <p class="history-empty" id="historyEmpty">Nothing yet. Text you convert is kept here, in this browser only.</p>
-          <button type="button" class="btn btn-quiet" id="clearHistory" hidden>Clear recent</button>
-        </details>
+        <div class="below-converter">
+          <details class="history" id="history">
+            <summary>Recent <span id="historyCount"></span></summary>
+            <ol class="history-list" id="historyList"></ol>
+            <p class="history-empty" id="historyEmpty">Nothing yet. Text you translate is kept here, in this browser only.</p>
+            <button type="button" class="btn btn-quiet" id="clearHistory" hidden>Clear recent</button>
+          </details>
+          <a class="letters-link" href="letters.html">Not sure what to type? See every Tamil letter</a>
+        </div>
       </div>
     </section>
 
-    <!-- Letter guide -->
-    <section class="section" id="letters" aria-labelledby="lettersTitle">
+    <section class="section" id="word" aria-labelledby="wordTitle">
       <div class="wrap">
-        <h2 id="lettersTitle">Letter guide</h2>
-        <p class="lede">What to type for each Tamil letter. Click any letter to add it to the converter.</p>
-
-        <div class="guide-grid">
-          <div class="guide-block">
-            <h3>Vowels <span lang="ta">உயிர்</span></h3>
-            <div class="keys" id="vowelKeys"></div>
-          </div>
-          <div class="guide-block guide-wide">
-            <h3>Consonants <span lang="ta">மெய்</span></h3>
-            <div class="keys" id="consonantKeys"></div>
-          </div>
-          <div class="guide-block">
-            <h3>Borrowed letters <span lang="ta">கிரந்தம்</span></h3>
-            <div class="keys" id="granthaKeys"></div>
-          </div>
-          <div class="guide-block guide-wide">
-            <h3>Letter pairs</h3>
-            <p class="small">Some pairs are always written together in Tamil, so a single shortcut types both.</p>
-            <table class="pairs" id="pairsTable">
-              <thead><tr><th scope="col">Tamil</th><th scope="col">Type</th><th scope="col">Example</th></tr></thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="guide-block grid-block">
-          <h3>All combinations <span lang="ta">உயிர்மெய்</span></h3>
-          <p class="small">Each row is a consonant and each column a vowel. Hover or focus a letter to see what to type.</p>
-          <div class="grid-scroll" tabindex="0" aria-label="Table of Tamil consonant and vowel combinations, scrollable">
-            <table class="uyirmei" id="uyirmei"></table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Word of the day -->
-    <section class="section section-word" id="word" aria-labelledby="wordTitle">
-      <div class="wrap word-inner">
-        <div>
-          <h2 id="wordTitle">Word of the day</h2>
-          <p class="lede">A new Tamil word every day, with its meaning and exactly what to type to write it.</p>
-        </div>
         <div class="word-card">
-          <p class="word-ta" lang="ta" id="wotdTamil"></p>
-          <p class="word-type">Type it as <kbd id="wotdTanglish"></kbd></p>
-          <p class="word-meaning" id="wotdMeaning"></p>
-          <p class="word-note" id="wotdNote"></p>
-          <div class="word-actions">
-            <button type="button" class="btn btn-primary" id="wotdTry">Try it in the converter</button>
-            <button type="button" class="btn" id="wotdNext">Show another word</button>
+          <div class="word-main">
+            <h2 id="wordTitle">Word of the day</h2>
+            <p class="word-ta" lang="ta" id="wotdTamil"></p>
+            <p class="word-type">Type it as <kbd id="wotdTanglish"></kbd></p>
+          </div>
+          <div class="word-side">
+            <p class="word-meaning" id="wotdMeaning"></p>
+            <p class="word-note" id="wotdNote"></p>
+            <div class="word-actions">
+              <button type="button" class="btn btn-on-accent" id="wotdTry">Try it</button>
+              <button type="button" class="btn btn-ghost" id="wotdNext">Show another word</button>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- How it works -->
     <section class="section" id="how" aria-labelledby="howTitle">
       <div class="wrap">
         <h2 id="howTitle">How it works</h2>
@@ -163,11 +126,11 @@
           <ol class="how-steps">
             <li>
               <h3>Read the longest piece first</h3>
-              <p>The converter reads your text from left to right. At each point it takes the longest piece it recognises, so <kbd>zh</kbd> becomes ழ instead of a z followed by an h, and <kbd>aa</kbd> becomes the long ா.</p>
+              <p>The translator reads your text from left to right and always takes the longest piece it recognises, so <kbd>zh</kbd> becomes ழ instead of a z followed by an h, and <kbd>aa</kbd> becomes the long ா.</p>
             </li>
             <li>
               <h3>Build each letter from two parts</h3>
-              <p>Most Tamil letters are a consonant plus a vowel sign: க and ி make கி. A consonant with no vowel after it gets a dot, the pulli: க். So each piece becomes a consonant, a vowel, or both joined.</p>
+              <p>Most Tamil letters are a consonant plus a vowel sign: க and ி make கி. A consonant with no vowel after it gets a dot, the pulli: க்.</p>
             </li>
             <li>
               <h3>Check where the letter sits</h3>
@@ -175,13 +138,12 @@
             </li>
             <li>
               <h3>Compare with real words</h3>
-              <p>English letters can't show every Tamil sound, so <kbd>l</kbd> might mean ல, ள or ழ. For each word, Ezhuthu tries small changes like these and offers the ones found in a list of about 17,600 Tamil words, most common first.</p>
+              <p>English letters can't show every Tamil sound, so <kbd>l</kbd> might mean ல, ள or ழ. For each word, Ari tries small changes like these and offers the ones found in a list of about 17,600 Tamil words, most common first.</p>
             </li>
           </ol>
-
           <div class="trace-panel">
             <h3>Step by step: <span id="traceWord"></span></h3>
-            <p class="small">How the text in the converter was read. Change it above to see a new breakdown.</p>
+            <p class="small">How the text in the translator was read. Change it above to see a new breakdown.</p>
             <ol class="trace" id="trace"></ol>
           </div>
         </div>
@@ -199,7 +161,6 @@
   <script src="js/translit.js"></script>
   <script src="js/dictionary.js"></script>
   <script src="js/data.js"></script>
-  <script src="js/kolam.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/translate.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-// app.js — connects the converter engine (translit.js) to the page.
+// translate.js — the translator page (index.html).
 (function () {
   "use strict";
 
@@ -247,7 +247,7 @@
 
   $("downloadBtn").addEventListener("click", () => {
     const blob = new Blob([outputText()], { type: "text/plain;charset=utf-8" });
-    const a = el("a", { href: URL.createObjectURL(blob), download: mode === "to-ta" ? "ezhuthu-tamil.txt" : "ezhuthu-tanglish.txt" });
+    const a = el("a", { href: URL.createObjectURL(blob), download: mode === "to-ta" ? "tamil.txt" : "tanglish.txt" });
     document.body.append(a);
     a.click();
     a.remove();
@@ -278,7 +278,7 @@
   // ---------------------------------------------------------------------------
   // Recent conversions (kept in this browser only)
   // ---------------------------------------------------------------------------
-  const HISTORY_KEY = "ezhuthu-history";
+  const HISTORY_KEY = "ari-history";
   let historyTimer = null;
 
   function scheduleHistory() {
@@ -312,7 +312,7 @@
         input.value = item.i;
         render();
         input.focus();
-        $("converter").scrollIntoView({ block: "start" });
+        window.scrollTo({ top: 0 });
       });
       ol.append(el("li", {}, btn));
     });
@@ -322,75 +322,6 @@
   }
 
   $("clearHistory").addEventListener("click", () => { store.set(HISTORY_KEY, []); renderHistory(); });
-
-  // ---------------------------------------------------------------------------
-  // Letter guide
-  // ---------------------------------------------------------------------------
-  // Insert text at the cursor as if it had been typed
-  function insertAtCursor(text) {
-    const start = input.selectionStart ?? input.value.length;
-    const end = input.selectionEnd ?? input.value.length;
-    input.setRangeText(text, start, end, "end");
-    input.focus();
-    render();
-    scheduleHistory();
-  }
-
-  // What to insert for a letter: its Tanglish spelling if that converts back to
-  // the same letter, otherwise the Tamil letter itself.
-  function insertionFor(tamil, typed, isConsonant) {
-    if (mode === "to-en") return tamil;
-    const candidate = typed + (isConsonant ? "a" : "");
-    return T.transliterate(candidate) === tamil ? candidate : tamil;
-  }
-
-  function keyButton(tamil, typedLabel, isConsonant) {
-    const firstSpelling = typedLabel.split(" ")[0];
-    const btn = el("button", { type: "button", className: "key" },
-      el("span", { className: "key-ta", lang: "ta", textContent: tamil }),
-      el("span", { className: "key-en", textContent: typedLabel }));
-    btn.setAttribute("aria-label", `${tamil}: type ${typedLabel}`);
-    btn.addEventListener("click", () => insertAtCursor(insertionFor(tamil, firstSpelling, isConsonant)));
-    return btn;
-  }
-
-  D.VOWEL_GUIDE.forEach(([ta, en]) => $("vowelKeys").append(keyButton(ta, en, false)));
-  D.CONSONANT_GUIDE.forEach(([ta, en]) => $("consonantKeys").append(keyButton(ta, en, true)));
-  D.GRANTHA_GUIDE.forEach(([ta, en]) => $("granthaKeys").append(keyButton(ta, en, ta !== "ஸ்ரீ")));
-
-  const pairsBody = $("pairsTable").querySelector("tbody");
-  D.CLUSTER_GUIDE.forEach(([ta, en, example]) => {
-    pairsBody.append(el("tr", {},
-      el("td", { lang: "ta", textContent: ta }),
-      el("td", {}, el("kbd", { textContent: en })),
-      el("td", { textContent: example })));
-  });
-
-  // Uyirmei grid
-  (function buildGrid() {
-    const table = $("uyirmei");
-    const head = el("tr", {}, el("th", { scope: "col" }));
-    D.GRID_SIGNS.forEach(([, en], idx) => {
-      const vowel = D.VOWEL_GUIDE[idx][0];
-      head.append(el("th", { scope: "col" }, el("span", { lang: "ta", textContent: vowel }), el("br"), en));
-    });
-    table.append(el("thead", {}, head));
-    const body = el("tbody");
-    D.GRID_CONSONANTS.forEach((c) => {
-      const row = el("tr", {}, el("th", { scope: "row", lang: "ta", textContent: c + "்" }));
-      D.GRID_SIGNS.forEach(([sign]) => {
-        const letter = c + sign;
-        const typed = T.toTanglish(letter);
-        const works = T.transliterate(typed) === letter;
-        const btn = el("button", { type: "button", lang: "ta" }, letter, el("small", { textContent: works ? typed : "–" }));
-        btn.setAttribute("aria-label", works ? `${letter}: type ${typed}` : letter);
-        btn.addEventListener("click", () => insertAtCursor(mode === "to-ta" && works ? typed : letter));
-        row.append(el("td", {}, btn));
-      });
-      body.append(row);
-    });
-    table.append(body);
-  })();
 
   // ---------------------------------------------------------------------------
   // Word of the day
@@ -410,7 +341,7 @@
     setMode("to-ta");
     input.value = D.WORDS_OF_THE_DAY[wordIndex].tanglish;
     render();
-    $("converter").scrollIntoView({ block: "start" });
+    window.scrollTo({ top: 0 });
     input.focus({ preventScroll: true });
   });
   showWord();
@@ -444,35 +375,12 @@
     }
   }
 
-  // ---------------------------------------------------------------------------
-  // Hero kolam: dots first, then one unbroken line, the way a kolam is drawn
-  // ---------------------------------------------------------------------------
-  (function drawKolam() {
-    const box = $("heroKolam");
-    box.innerHTML = window.Kolam.kolamSVG(6, 5, { gap: 60, pad: 18, stroke: 3.4, dot: 3.8 });
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) return;
-    const path = box.querySelector(".kolam-line");
-    const len = path.getTotalLength();
-    path.style.strokeDasharray = len;
-    path.style.strokeDashoffset = len;
-    path.style.animationDelay = "1.1s";
-    box.querySelectorAll(".kolam-dots circle").forEach((c, i) => { c.style.animationDelay = `${i * 32}ms`; });
-    box.classList.add("kolam-draw");
-  })();
-
-  // ---------------------------------------------------------------------------
-  // Theme toggle
-  // ---------------------------------------------------------------------------
-  const root = document.documentElement;
-  const isDark = () => root.dataset.theme === "dark" || (!root.dataset.theme && matchMedia("(prefers-color-scheme: dark)").matches);
-  function syncThemeLabel() { $("themeToggle").setAttribute("aria-label", isDark() ? "Switch to light mode" : "Switch to dark mode"); }
-  $("themeToggle").addEventListener("click", () => {
-    root.dataset.theme = isDark() ? "light" : "dark";
-    try { localStorage.setItem("ezhuthu-theme", root.dataset.theme); } catch (e) { /* ignore */ }
-    syncThemeLabel();
-  });
-  syncThemeLabel();
+  // Text sent from the letters page: index.html?text=...
+  const fromLink = new URLSearchParams(location.search).get("text");
+  if (fromLink) {
+    input.value = fromLink.slice(0, 2000);
+    window.history.replaceState(null, "", location.pathname);
+  }
 
   renderHistory();
   render();
